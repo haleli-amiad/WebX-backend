@@ -1,4 +1,3 @@
-
 const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
@@ -12,14 +11,14 @@ module.exports = {
 }
 
 async function query(filterBy = {}) {
+    console.log('filterBy in back', filterBy);
+
     const criteria = _buildCriteria(filterBy)
+    console.log('cretiria in back:', criteria);
+
     const collection = await dbService.getCollection('web')
     try {
-        // const webs = await collection.find().toArray();
-        // const test = await collection.find({name: { $regex: 'a'}}).toArray();
         const webs = await collection.find(criteria).toArray();
-        webs.forEach(web => delete web.password);
-        
         console.log('test res here.................', webs);
         return webs
     } catch (err) {
@@ -41,19 +40,12 @@ async function getById(webId) {
 
 
 function _buildCriteria(filterBy) {
-    const criteria = {};
-    if (filterBy.term) {
-        const term = filterBy.term
-        criteria.name = { $regex: term }
+    var criteria = {};
+    if (filterBy._id) {
+        const createdBy = { 'createdBy._id': filterBy._id }
+        criteria = createdBy
     }
-    console.log('filterBy.inStock here........', filterBy);
-    if (filterBy.inStock !== 'all' && filterBy.inStock !== undefined) {
-        criteria.inStock = JSON.parse(filterBy.inStock)
-    }
-    // console.log('criteria here........', criteria);
-    // if (filterBy.minBalance) {
-    //     criteria.balance = { $gte: +filterBy.minBalance }
-    // }
+
     return criteria;
 }
 
@@ -69,6 +61,8 @@ async function getByEmail(email) {
 }
 
 async function remove(webId) {
+    console.log('webId in remove:', webId);
+
     const newId = webId + ''
     const collection = await dbService.getCollection('web')
     try {
@@ -93,6 +87,8 @@ async function update(web) {
 }
 
 async function add(web) {
+    console.log('this is the web to add:', web);
+
     const collection = await dbService.getCollection('web')
     try {
         await collection.insertOne(web);
@@ -102,6 +98,3 @@ async function add(web) {
         throw err;
     }
 }
-
-
-
