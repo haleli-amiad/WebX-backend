@@ -11,7 +11,9 @@ const io = require('socket.io')(http);
 
 // Express App Config
 app.use(cookieParser())
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    limit: '50mb'
+  }));
 app.use(session({
     secret: 'WebX Token 436346437326',
     resave: false,
