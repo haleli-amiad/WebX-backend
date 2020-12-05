@@ -4,9 +4,9 @@
   "description": "a production ready server including logger",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "server:dev": "set NODE_ENV=development & nodemon app.js",
-    "server:prod": "set NODE_ENV=development & node app.js"
+    "server:prod": "set NODE_ENV=production & node app.js"
   },
   "author": "",
   "license": "ISC",
